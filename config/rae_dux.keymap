@@ -1,1 +1,147 @@
-#include "base.keymap"
+/*
+ * Copyright (c) 2021 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/mouse.h>
+
+#define BASE_L 0
+#define SYMB_L 1
+#define ARRW_L 2
+#define NUMB_L 3
+#define MOUS_L 4
+#define FUNC_L 5
+
+/ {
+    combos {
+        compatible = "zmk,combos";
+
+        /*                KEY POSITIONS
+
+          ╭────────────────────╮ ╭────────────────────╮
+          │  0   1   2   3   4 │ │  5   6   7   8   9 │
+          │ 10  11  12  13  14 │ │ 15  16  17  18  19 │
+          │ 20  21  22  23  24 │ │ 25  26  27  28  29 │
+          ╰───────╮ 30  31  32 │ │ 33  34  35 ╭───────╯
+                  ╰────────────╯ ╰────────────╯        */
+
+        combo_esc {
+            timeout-ms = <50>;
+            bindings = <&kp ESC>;
+            key-positions = <3 4>;
+        };
+        combo_tab {
+            timeout-ms = <50>;
+            bindings = <&kp TAB>;
+            key-positions = <13 14>;
+        };
+        combo_enter {
+            timeout-ms = <50>;
+            bindings = <&kp ENTER>;
+            key-positions = <15 16>;
+        };
+        combo_up {
+            timeout-ms = <50>;
+            bindings = <&kp UP>;
+            key-positions = <5 6>;
+        };
+        combo_down {
+            timeout-ms = <50>;
+            bindings = <&kp DOWN>;
+            key-positions = <25 26>;
+        };
+        combo_right {
+            timeout-ms = <50>;
+            bindings = <&kp RIGHT>;
+            key-positions = <16 17>;
+        };
+    };
+
+    behaviors {
+        lhm: left_home_row_mod {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LEFT_HOME_ROW_MOD";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <125>;
+            require-prior-idle-ms = <125>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 33 34 35>;
+        };
+
+        rhm: right_home_row_mod {
+            compatible = "zmk,behavior-hold-tap";
+            label = "RIGHT_HOME_ROW_MOD";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <125>;
+            require-prior-idle-ms = <125>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        base_layer {
+            bindings = <
+                &kp Q          &kp W          &kp E          &lhm LALT R    &lt MOUS_L T       &kp Y          &rhm LALT U    &kp I          &kp O          &kp P
+                &lhm LSHFT A   &lhm LCTRL S   &lhm RALT D    &lhm LGUI F    &lt NUMB_L G       &kp H          &rhm RGUI J    &rhm RALT K    &rhm RCTRL L   &rhm RSHFT SEMI
+                &kp Z          &kp X          &kp C          &kp V          &lt FUNC_L B       &kp N          &kp M          &kp COMMA      &kp DOT        &kp FSLH
+                               &sl SYMB_L     &kp SPACE      &sl NUMB_L     &sl MOUS_L         &kp BSPC       &sl ARRW_L
+            >;
+        };
+
+        sym_layer {
+            bindings = <
+                &kp EXCL       &kp AT         &kp HASH       &kp DLLR       &kp PRCNT          &kp CARET      &kp AMPS       &kp ASTRK      &trans         &trans
+                &kp TILDE      &kp PIPE       &kp MINUS      &kp PLUS       &kp COLON          &kp LBRC       &kp LBKT       &kp LPAR       &kp DQT        &kp LT
+                &kp GRAVE      &kp BSLH       &kp UNDER      &kp EQUAL      &kp SEMI           &kp RBRC       &kp RBKT       &kp RPAR       &kp SQT        &kp GT
+                               &trans         &trans         &trans         &trans             &trans         &trans
+            >;
+        };
+
+        arrw_layer {
+            bindings = <
+                &kp LG(N1)     &kp LG(N2)     &kp LG(N3)     &kp LG(N4)     &trans             &kp LA(TAB)    &kp LA(N4)     &kp LA(N3)     &kp LA(N2)     &kp LA(N1)
+                &kp LSHFT      &kp LCTRL      &kp LALT       &kp LGUI       &kp TAB            &kp LEFT       &kp DOWN       &kp UP         &kp RIGHT      &caps_word
+                &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_CLR         &kp HOME       &kp PG_DN      &kp PG_UP      &kp END        &trans
+                               &trans         &trans         &trans         &trans             &trans         &trans
+            >;
+        };
+
+        num_layer {
+            bindings = <
+                &trans         &trans         &trans         &trans         &trans             &kp N1         &kp N2         &kp N3         &kp N4         &kp N5
+                &kp LSHFT      &kp LCTRL      &kp LALT       &kp LGUI       &trans             &kp N6         &kp N7         &kp N8         &kp N9         &kp N0
+                &trans         &trans         &trans         &trans         &trans             &trans         &trans         &trans         &trans         &trans
+                               &trans         &trans         &trans         &trans             &trans         &trans
+            >;
+        };
+
+        mous_layer {
+            bindings = <
+                &trans         &trans         &trans         &trans         &trans             &mkp LCLK      &mkp MCLK      &mkp RCLK      &trans         &trans
+                &trans         &trans         &trans         &trans         &trans             &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_UP   &mmv MOVE_RIGHT &trans
+                &trans         &trans         &trans         &trans         &trans             &trans         &msc SCRL_DOWN &msc SCRL_UP   &trans         &trans
+                               &trans         &trans         &trans         &trans             &trans         &trans
+            >;
+        };
+
+        func_layer {
+            bindings = <
+                &trans         &trans         &trans         &trans         &trans             &kp F1         &kp F2         &kp F3         &kp F4         &kp F5
+                &kp LSHFT      &kp LCTRL      &kp LALT       &kp LGUI       &trans             &kp F6         &kp F7         &kp F8         &kp F9         &kp F10
+                &trans         &trans         &trans         &trans         &trans             &kp F11        &kp F12        &trans         &trans         &trans
+                               &trans         &trans         &trans         &trans             &trans         &trans
+            >;
+        };
+    };
+};
